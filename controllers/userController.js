@@ -1,7 +1,7 @@
 const {User} = require('../models');
 
 module.exports = {
-    // Get all students
+    // Get all users
     async getUsers(req, res) {
       try {
         const users = await User.find().populate('friends').populate('thoughts');
@@ -12,7 +12,7 @@ module.exports = {
         return res.status(500).json(err);
       }
     },
-    // Get a single student
+    // Get a single user
     async getSingleUser(req, res) {
       try {
         const user = await User.findOne({ _id: req.params.userId })
@@ -30,7 +30,7 @@ module.exports = {
         return res.status(500).json(err);
       }
     },
-    // create a new student
+    // create a new user
     async createUser(req, res) {
       try {
         const user = await User.create(req.body);
@@ -39,7 +39,7 @@ module.exports = {
         res.status(500).json(err);
       }
     },
-    // Delete a student and remove them from the course
+    // Delete a user and remove them from the course
     async deleteUser(req, res) {
       try {
         const user = await User.findOneAndDelete({ _id: req.params.userId });
@@ -66,6 +66,8 @@ module.exports = {
         res.status(500).json(err);
       }
     },
+
+    // add friends to user's friends array
     async addFriend(req, res) {
         try{
         const updateUser = await User.findOneAndUpdate(
@@ -81,5 +83,22 @@ module.exports = {
         console.log(err);
         res.status(500).json(err);
     }
-    }
-  };
+    },
+    	// Remove a friend from a user's friends array
+	async deleteFriend(req, res) {
+		try {
+			const updateUserData = await User.findOneAndUpdate(
+				{ _id: req.params.userId},
+				{$pull: { friends: req.params.friendId }},
+				{ runValidators: true, new: true }
+			);
+
+			if (!updateUserData) {
+				return res.status(404).json({ message: 'No user found with that id value' });
+			};
+			res.status(200).json(updateUserData)
+		} catch (err) {
+			res.status(500).json(err);
+		}
+	}
+}
