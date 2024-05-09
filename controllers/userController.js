@@ -39,6 +39,26 @@ module.exports = {
         res.status(500).json(err);
       }
     },
+    // update user information
+    async updateUser(req, res) {
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $set: req.body },
+          { new: true, runValidators: true }
+        );
+    
+        if (!updatedUser) {
+          return res.status(404).json({ message: 'No user with this ID' });
+        }
+    
+        res.json(updatedUser);
+      } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+      }
+    },
+
     // Delete a user and remove them from the course
     async deleteUser(req, res) {
       try {
