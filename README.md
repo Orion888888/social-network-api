@@ -53,7 +53,7 @@ MIT
 
 ## Questions
 
-My GitHub Profile: [Pedro M. Gonzalez](https://github.com/orion888888)
+My GitHub Profile: [orion888888](https://github.com/orion888888)
 
 ## Walk-through video
 
